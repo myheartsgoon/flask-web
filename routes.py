@@ -23,9 +23,10 @@ def signup():
         if not form.validate():
             return render_template("signup.html", form=form)
         else:
-            newuser = User(form.first_name.data)
-
-
+            newuser = User(form.first_name.data, form.last_name.data, form.email.data, form.password.data)
+            db.session.add(newuser)
+            db.session.commit()
+            return "Successful"
     elif request.method == 'GET':
         return render_template("signup.html", form=form)
 
