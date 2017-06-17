@@ -6,7 +6,7 @@ from forms import SignupForm, LoginForm, AddressForm
 
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:62171175110@127.0.0.1/flask_web'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:password@127.0.0.1/flask_web'
 db.init_app(app)
 
 app.secret_key = 'development-key'
