@@ -1,5 +1,6 @@
 {% extends "layout.html" %}
 
+
 {% block content %}
   <main class="container signup-section">
     <div class="section-content">
@@ -40,6 +41,10 @@
               <p class="error-message">{{ error }}</p>
             {% endfor %}
           {% endif %}
+
+            {% for message in get_flashed_messages() %}
+            <p class="error-message">{{ message }}</p>
+            {% endfor %}
 
           {{ form.email }}
         </div>

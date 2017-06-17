@@ -2,6 +2,7 @@
  * General
  */
 
+
 html, body, h1 {
   margin: 0;
   padding: 0;
@@ -97,6 +98,13 @@ header {
 }
 
 .title {
+  float: left;
+  font-family: 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-size: 15px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+}
+.loginout {
   float: left;
   font-family: 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-size: 17px;
@@ -285,4 +293,9 @@ header {
 
 .leaflet-popup-content p {
   margin: 10px 0 ;
+}
+
+.corner {
+  float:right;
+  margin: 5px;
 }
