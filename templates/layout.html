@@ -11,13 +11,26 @@
       <div class="container">
         <h1 class="title">Learning Flask</h1>
       </div>
+
+      {% if 'email' in session %}
+      <div style="float:right;margin: 5px;">
+        <a href="{{ url_for('logout') }}" class="title">LogOut</a>
+      </div>
+      {% endif %}
+
+      {% if 'email' not in session %}
       <div style="float:right;margin: 5px;">
         <a href="{{ url_for('login') }}" class="title">Login</a>
       </div>
-
       <div style="float:right;margin: 5px;">
         <a href="{{ url_for('signup') }}" class="title">Signup</a>
       </div>
+      {% endif %}
+
+      <div style="float:right;margin: 5px;">
+        <a href="{{ url_for('index') }}" class="title">Home</a>
+      </div>
+
       {% endblock %}
     </header>
 
