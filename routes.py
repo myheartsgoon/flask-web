@@ -2,12 +2,22 @@
 from flask import Flask, render_template, request, redirect, session, url_for, flash
 from models import db, User
 from forms import SignupForm, LoginForm, AddressForm
-
+from flask_login import LoginManager, login_required, current_user, login_user, logout_user
 
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:password@127.0.0.1/flask_web'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:62171175110@127.0.0.1/flask_web'
 db.init_app(app)
+login_manager = LoginManager()
+login_manager.session_protection = 'strong'
+login_manager.login_view = "login"
+login_manager.login_message = "Please login to access this page."
+login_manager.init_app(app)
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
+
 
 app.secret_key = 'development-key'
 
@@ -21,7 +31,7 @@ def about():
 
 @app.route("/signup", methods=['GET', 'POST'])
 def signup():
-    if 'email' in session:
+    if current_user.is_authenticated:
         return redirect(url_for('home'))
 
     form = SignupForm()
@@ -37,15 +47,15 @@ def signup():
             newuser = User(form.first_name.data, form.last_name.data, form.email.data, form.password.data)
             db.session.add(newuser)
             db.session.commit()
-            session['email'] = newuser.email
+            login_user(newuser)
             return redirect(url_for('home'))
     elif request.method == 'GET':
         return render_template("signup.html", form=form)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    if 'email' in session:
-        return  redirect(url_for('home'))
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
 
     form = LoginForm()
     if request.method == 'POST':
@@ -56,7 +66,7 @@ def login():
             password = form.password.data
             user = User.query.filter_by(email=email).first()
             if user is not None and user.check_password(password):
-                session['email'] = email
+                login_user(user)
                 return redirect(url_for('home'))
             else:
                 flash('Email address or password incorrect!')
@@ -66,13 +76,12 @@ def login():
 
 @app.route('/logout')
 def logout():
-    session.pop('email', None)
+    logout_user()
     return redirect(url_for('index'))
 
 @app.route('/home', methods=['POST', 'GET'])
+@login_required
 def home():
-    if 'email' not in session:
-        return redirect(url_for('login'))
     form = AddressForm()
     if request.method == 'POST':
         if not form.validate():
