@@ -3,6 +3,7 @@ from flask import Flask, render_template, request, redirect, session, url_for, f
 from models import db, User
 from forms import SignupForm, LoginForm, AddressForm
 from flask_login import LoginManager, login_required, current_user, login_user, logout_user
+from datetime import timedelta
 
 
 app = Flask(__name__)
@@ -13,6 +14,12 @@ login_manager.session_protection = 'strong'
 login_manager.login_view = "login"
 login_manager.login_message = "Please login to access this page."
 login_manager.init_app(app)
+
+@app.before_request
+def make_session_permant():
+    session.permanent = True
+    app.permanent_session_lifetime = timedelta(minutes=5)
+
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -66,7 +73,7 @@ def login():
             password = form.password.data
             user = User.query.filter_by(email=email).first()
             if user is not None and user.check_password(password):
-                login_user(user)
+                login_user(user, form.remember_me.data)
                 return redirect(url_for('home'))
             else:
                 flash('Email address or password incorrect!')

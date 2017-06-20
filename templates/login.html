@@ -2,6 +2,7 @@
 
 
 {% block content %}
+<title >Login</title>
    <main class="container signup-section">
     <div class="section-content">
       <h2>Login</h2>
@@ -35,6 +36,12 @@
 
           {{ form.password }}
         </div>
+
+        <div class="remember-me">
+          {{ form.remember_me.label }}
+          {{ form.remember_me }}
+        </div>
+
         {{ form.submit(class="btn-primary") }}
       </form>
     </div>

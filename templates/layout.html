@@ -2,7 +2,7 @@
 <html>
   <head>
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:300,400,600' rel='stylesheet'>
-    <link href="{{ url_for('static', filename='css/main.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/main.css') }}?Thursday 24th of April 2008 04:45:21 PM" rel="stylesheet">
     <link rel="icon" href="{{ url_for('static', filename = 'img/favicon.ico') }}" type="image/x-icon">
   </head>
   <body>
@@ -19,9 +19,7 @@
       <div style="float:right;margin: 5px;">
         <a href="{{ url_for('signup') }}" class="title">Signup</a>
       </div>
-      {% endif %}
-
-      {% if current_user.is_authenticated %}
+      {% else %}
       <div style="float:right;margin: 5px;">
         <a href="{{ url_for('logout') }}" class="title">LogOut</a>
       </div>
