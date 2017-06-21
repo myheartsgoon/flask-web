@@ -13,19 +13,19 @@
       </div>
 
       {% if not current_user.is_authenticated %}
-      <div style="float:right;margin: 5px;">
+      <div class="corner">
         <a href="{{ url_for('login') }}" class="title">Login</a>
       </div>
-      <div style="float:right;margin: 5px;">
+      <div class="corner">
         <a href="{{ url_for('signup') }}" class="title">Signup</a>
       </div>
       {% else %}
-      <div style="float:right;margin: 5px;">
+      <div class="corner">
         <a href="{{ url_for('logout') }}" class="title">LogOut</a>
       </div>
       {% endif %}
 
-      <div style="float:right;margin: 5px;">
+      <div class="corner">
         <a href="{{ url_for('index') }}" class="title">Home</a>
       </div>
 

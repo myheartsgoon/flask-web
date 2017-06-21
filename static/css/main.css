@@ -175,8 +175,9 @@ header {
 }
 
 .remember-me {
-  font-family: "Times New Roman", Times, serif;
-  font-size: 15px;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 13px;
+  margin-bottom: 10px;
 }
 
 .form-group label {
