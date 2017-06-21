@@ -4,10 +4,23 @@ from models import db, User
 from forms import SignupForm, LoginForm, AddressForm
 from flask_login import LoginManager, login_required, current_user, login_user, logout_user
 from datetime import timedelta
+from send_mail import mail_bp, mail
+import os
 
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:62171175110@127.0.0.1/flask_web'
+
+#Send mail parameter
+app.register_blueprint(mail_bp)
+mail.init_app(app)
+app.config['MAIL_SERVER'] = 'smtp.qq.com' # 邮件服务器地址
+app.config['MAIL_PORT'] = 465 # 邮件服务器端口
+app.config['MAIL_USE_TLS'] = False # 启用 TLS
+app.config['MAIL_USE_SSL'] = True  # 启用 SSL
+app.config['MAIL_USERNAME'] = os.environ.get('MAIL_USERNAME') or '408168042@qq.com'
+app.config['MAIL_PASSWORD'] = os.environ.get('MAIL_PASSWORD') or 'ugoarxyzbardbhdb'
+
 db.init_app(app)
 login_manager = LoginManager()
 login_manager.session_protection = 'strong'
@@ -101,6 +114,7 @@ def home():
 @app.route('/map')
 def map():
     return render_template('map.html')
+
 
 @app.errorhandler(404)
 def page_not_found(error):
