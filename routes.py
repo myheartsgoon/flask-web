@@ -4,22 +4,13 @@ from models import db, User
 from forms import SignupForm, LoginForm, AddressForm
 from flask_login import LoginManager, login_required, current_user, login_user, logout_user
 from datetime import timedelta
-from send_mail import mail_bp, mail
+from send_mail import send_mail
 import os
 
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:62171175110@127.0.0.1/flask_web'
 
-#Send mail parameter
-app.register_blueprint(mail_bp)
-mail.init_app(app)
-app.config['MAIL_SERVER'] = 'smtp.qq.com' # 邮件服务器地址
-app.config['MAIL_PORT'] = 465 # 邮件服务器端口
-app.config['MAIL_USE_TLS'] = False # 启用 TLS
-app.config['MAIL_USE_SSL'] = True  # 启用 SSL
-app.config['MAIL_USERNAME'] = os.environ.get('MAIL_USERNAME') or '408168042@qq.com'
-app.config['MAIL_PASSWORD'] = os.environ.get('MAIL_PASSWORD') or 'ugoarxyzbardbhdb'
 
 db.init_app(app)
 login_manager = LoginManager()
@@ -67,10 +58,22 @@ def signup():
             newuser = User(form.first_name.data, form.last_name.data, form.email.data, form.password.data)
             db.session.add(newuser)
             db.session.commit()
-            login_user(newuser)
+            token = newuser.generate_confirmation_token()
+            send_mail(newuser.email, token)
             return redirect(url_for('home'))
     elif request.method == 'GET':
         return render_template("signup.html", form=form)
+
+@app.route('/confirm/<token>')
+@login_required
+def confirm(token):
+    if app.confirmed:
+        return redirect(url_for('home'))
+    if app.confirm(token):
+        flash('You have confirmed your account. Thanks!')
+    else:
+        flash('The confirmation link is invalid or has expired.')
+    return redirect(url_for('home'))
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
