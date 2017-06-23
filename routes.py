@@ -67,9 +67,9 @@ def signup():
 @app.route('/confirm/<token>')
 @login_required
 def confirm(token):
-    if app.confirmed:
+    if current_user.confirmed:
         return redirect(url_for('home'))
-    if app.confirm(token):
+    if current_user.confirm(token):
         flash('You have confirmed your account. Thanks!')
     else:
         flash('The confirmation link is invalid or has expired.')
