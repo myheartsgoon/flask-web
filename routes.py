@@ -9,7 +9,7 @@ import os
 
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:62171175110@127.0.0.1/flask_web'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://gtejvtehinokdk:eee8ae7f7c25812d0cbb3ffe6f79c8865977a9c9f72b2fe2d42198cd6ca502e7@ec2-50-19-218-160.compute-1.amazonaws.com:5432/df9ffpo6f18244'
 
 
 db.init_app(app)
